@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <link rel="icon" href="http://technology.pitt.edu/sites/all/themes/bootstrap/bootstrap_tech_pitt/favicon.ico?v=2" type="image/x-icon"></link>
+    <title>CSV analyser</title>
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/dc3.css">
+	<!-- Custom styles for this template -->
+    <link href="./css/styles.css" rel="stylesheet"></link>
+  </head>
+  <body>
+	<div id="uploadDiv" class="reportDiv textCenter">
+		<h1>CSV File Analyser 1.0</h1>
+		<p> Please choose a csv file from your drive and click Fetch CSV to upload</p>
+		<input type="file" id="fileUpload" class="btnChoose"></input>
+		<button onclick="Upload()" class="btnUpload">Fetch CSV</button>
+		<div id="reportDiv" class="hide">
+		</div>
+	</div>
+	<div id="dvCSV"></div>
+	
+	
+	<div class='row'>
+		<div class='span12'>
+			<h3>New Zealand Earthquakes</h3>
+				<div class='row'>
+					<div class='pie-graph span6' id='dc-magnitude-chart'>
+						<h4>Events by Magnitude</h4>
+					</div>
+					<div class='pie-graph span6' id='dc-depth-chart'>
+						<h4>Events by Depth (km)</h4>
+					</div>    
+				</div>
+		</div>
+	</div>
+
+	<div class='row'>
+		<div class='span12' id='dc-time-chart'>
+		  <h4>Events per hour</h4>
+		</div>
+	</div>
+
+	
+	
+    <!-- Placed at the end of the document so the pages load faster -->
+	    <!-- d3.tip -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="./js/d3tip.js"></script>
+	<script type="text/javascript" src="./js/crossfilter.js"></script>
+	<script type="text/javascript" src="./js/dc3.js"></script>
+	<script type="text/javascript" src="./js/script.js"></script>
+	
+  </body>
+</html>

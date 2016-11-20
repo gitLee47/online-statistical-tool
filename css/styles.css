@@ -1,0 +1,127 @@
+table {
+  margin: 0 auto;
+  text-align: center;
+  border-collapse: collapse;
+  border: 1px solid #d4d4d4;
+}
+ 
+tr:nth-child(even) {
+  background: #d4d4d4;
+}
+ 
+.btnUpload {
+	box-shadow: 0px 1px 0px 0px #f7c5c0;
+	background-color:#fc8d83;
+	border-radius:6px;
+	border:1px solid #d83526;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #b23e35;
+}
+.btnUpload:hover {
+	background-color:#e4685d;
+}
+.btnUpload:active {
+	position:relative;
+	top:1px;
+}
+
+.btnChoose {
+	box-shadow: 0px 10px 14px -7px #276873;
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block !important;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:5px 5px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+.btnChoose:hover {
+	background-color:#408c99;
+}
+.btnChoose:active {
+	position:relative;
+	top:1px;
+}
+
+.myDiv {
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background-color:#FDF8F4;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#777777;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	margin-top: 20px;
+	padding:6px 6px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+
+select {
+    padding:3px;
+    margin: 0;
+    border-radius:4px;
+    box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+    background: #f8f8f8;
+    color:#888;
+    border:1px solid #dcdcdc;
+    display: inline-block;
+    cursor:pointer;
+}
+
+th, td {
+  padding: 10px 30px;
+}
+ 
+th {
+  border-bottom: 1px solid #d4d4d4;
+  background-color: #d4ffd4;
+} 
+
+th:hover {
+    cursor:pointer;
+    background:#AAA;
+}
+
+.reportDiv {
+    font: 14px Arial, sans-serif;
+    padding-top: 8px;
+    clear: both;
+    line-height: 1.4em;
+    background-color: #fbfbfb;
+    border: #e1e8ed solid 1px;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 50px;
+}
+
+.show{
+   display: block;
+}
+
+.hide{
+   display: none;
+}
+
+.textCenter{
+	 text-align: center;
+}
+.btnPrint {
+  margin:auto;
+  margin-top:10px;
+  display:block;
+}
