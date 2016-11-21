@@ -18,28 +18,46 @@
 		<div id="reportDiv" class="hide">
 		</div>
 	</div>
-	<div id="dvCSV"></div>
 	
-	
-	<div class='row'>
-		<div class='span12'>
-			<h3>New Zealand Earthquakes</h3>
-				<div class='row'>
-					<div class='pie-graph span6' id='dc-magnitude-chart'>
-						<h4>Events by Magnitude</h4>
-					</div>
-					<div class='pie-graph span6' id='dc-depth-chart'>
-						<h4>Events by Depth (km)</h4>
-					</div>    
+	<div class="panel with-nav-tabs panel-default" id="line-and-bubble">
+		<div class="panel-heading">
+			<ul id="bar-time-range" class="nav nav-tabs nav-justified">
+				<li class="active"><a href="#tab1default" data-toggle="tab">Table</a></li>
+				<li><a href="#tab2default" data-toggle="tab">Graphs</a></li>
+			</ul>
+		</div>
+		<div class="panel-body">
+			<div class="tab-content">
+				<div class="tab-pane fade in active" id="tab1default">
+					<div id="dvCSV"></div>							
 				</div>
-		</div>
-	</div>
 
-	<div class='row'>
-		<div class='span12' id='dc-time-chart'>
-		  <h4>Events per hour</h4>
+				<div class="tab-pane fade" id="tab2default">
+					<div class="reportDiv">
+						<div class="row">
+							<div span ="span12">
+									<h3>New Zealand Earthquakes</h3>
+									<div span ="span12">
+										<div class='pie-graph span6' id='dc-magnitude-chart'>
+											<h4>Events by Magnitude</h4>
+										</div>
+										<div class='pie-graph span6' id='dc-depth-chart'>
+											<h4>Events by Depth (km)</h4>
+										</div>    
+									</div>
+							</div>
+						</div>
+						<div class='row'>
+							<div class='span12' id='dc-time-chart'>
+							  <h4>Events per hour</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+	
 
 	
 	
