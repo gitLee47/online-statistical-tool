@@ -117,10 +117,40 @@ function createReport(headers) {
 		for(i = 0; i< headers.length; i++) {
 			sumSelect.innerHTML += '<option value="'+i+'">'+headers[i]+'</option>';
 		}
-	//Creating the statistics div and hding it	
+
+	//Creating the statistics div and hiding it	
 	var statDiv = document.createElement("div");
 		statDiv.setAttribute("id", "statDiv");
 		statDiv.setAttribute("class", "hide");
+		
+	//Creating the Graph Selectors
+	var graphSelTitle = document.createElement("h3");
+	graphSelTitle.innerHTML = "Select X and Y axis for graphs:";
+	
+	var xSelect = document.createElement("select");
+		xSelect.setAttribute("id", "selectX");
+		//xSelect.setAttribute("onchange", "Statistics(this.value)");
+		//Adding the headers to the dynamic drop down		
+		xSelect.innerHTML = '<option value="-1">--Select X--</option>';
+		for(i = 0; i< headers.length; i++) {
+			xSelect.innerHTML += '<option value="'+i+'">'+headers[i]+'</option>';
+		}
+		
+	var ySelect = document.createElement("select");
+		ySelect.setAttribute("id", "selectY");
+		//ySelect.setAttribute("onchange", "Statistics(this.value)");
+		//Adding the headers to the dynamic drop down		
+		ySelect.innerHTML = '<option value="-1">--Select Y--</option>';
+		for(i = 0; i< headers.length; i++) {
+			ySelect.innerHTML += '<option value="'+i+'">'+headers[i]+'</option>';
+		}
+		
+	var plotBtn = document.createElement("button");
+		plotBtn.setAttribute("id", "plotBtn");
+		plotBtn.setAttribute("onclick", "plotGraph()");
+		plotBtn.innerHTML = "<p>Plot Graphs</p>";
+		plotBtn.setAttribute("class","btnUpload btnPrint textCenter");		
+
 	
 	//Appending all the above items to the report in sequence
 	var reportDiv = document.getElementById("reportDiv");
@@ -133,6 +163,10 @@ function createReport(headers) {
 		reportDiv.appendChild(sumTitle);
 		reportDiv.appendChild(sumSelect);
 		reportDiv.appendChild(statDiv);
+		reportDiv.appendChild(graphSelTitle);
+		reportDiv.appendChild(xSelect);
+		reportDiv.appendChild(ySelect);
+		reportDiv.appendChild(plotBtn);
 		
 		//Showing the report once it is ready
 		reportDiv.removeAttribute("class");
@@ -246,8 +280,6 @@ function Statistics(col) {
 	else {
 		alert("This column holds NaN values!! Please select another");
 	}
-	
-	createCharts();
 }
 
 function createCharts() {
@@ -275,8 +307,10 @@ function createCharts() {
 		  var magValue = facts.dimension(function (d) {
 			return d.mag;       // group or filter by magnitude
 		  });
+		  
 		  var magValueGroupSum = magValue.group()
-			.reduceSum(function(d) { return d.mag; });	// sums the magnitudes per magnitude
+			.reduceSum(function(d) { return d.mag; });
+			// sums the magnitudes per magnitude
 		  var magValueGroupCount = magValue.group()
 			.reduceCount(function(d) { return d.mag; }) // counts the number of the facts by magnitude
 
@@ -357,4 +391,110 @@ function createCharts() {
 			
 		dc.renderAll();
   });
+}
+
+function plotGraph(){
+	var x = document.getElementById("selectX");
+	var y = document.getElementById("selectY");
+	
+	//console.log(x.value);
+	//console.log(y.value);
+	createDynamicCharts(x.value, y.value);
+}
+
+function createDynamicCharts(xCol,yCol) {
+	
+	//console.log(xCol);
+	
+	var rows = tableBody.rows,
+        rlen = rows.length,
+        x = [], y = [], data = [],
+        i;
+    //Get statistics for the selected column if valid
+	cells = rows[0].cells;
+
+	if (!isNaN(parseInt(cells[xCol].innerHTML)) && !isNaN(parseInt(cells[yCol].innerHTML))) {
+	
+		for (i = 0; i < rlen; i++) {
+			data.push({x:parseInt(rows[i].cells[xCol].innerHTML),
+					   y:parseInt(rows[i].cells[yCol].innerHTML)});
+		}
+	}
+	else {
+		alert("One of the column holds NaN values!! Please select another");
+		return;
+	}
+	
+	function print_filter(filter){
+				var f=eval(filter);
+				if (typeof(f.length) != "undefined") {}else{}
+				if (typeof(f.top) != "undefined") {f=f.top(Infinity);}else{}
+				if (typeof(f.dimension) != "undefined") {f=f.dimension(function(d) { return "";}).top(Infinity);}else{}
+				console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
+			};
+			
+	// format our data
+	var dtgFormat = d3.time.format("%Y-%m-%dT%H:%M:%S");
+	
+	var timeChartSum = dc.lineChart("#dc-time-chart-sum");
+	var timeChartCount = dc.lineChart("#dc-time-chart-count");
+	var barChartSum = dc.barChart("#dc-bar-chart-sum");
+	
+	var facts = crossfilter(data);
+	//print_filter(facts);
+	
+	var xValue = facts.dimension(function (d) {
+		return d.x;
+	});
+	
+	var yGroupCount = xValue.group().reduceCount(function(d) { return d.y; });
+	var yGroupSum = xValue.group().reduceSum(function(d) { return d.y; });
+			
+	timeChartSum.width(960)
+			.height(400)
+			.margins({top: 10, right: 10, bottom: 20, left: 40})
+			.dimension(xValue)
+			.group(yGroupSum)
+			.renderHorizontalGridLines(true)
+			.renderVerticalGridLines(true)	 
+			.mouseZoomable(true)
+			.transitionDuration(0)
+			.rangeChart(barChartSum)
+			.renderDataPoints({radius: 5})
+			.elasticY(true)
+			.brushOn(false)
+			.x(d3.scale.linear().domain([0, 100]))
+			//.y(d3.scale.linear().domain([0, 50]))// scale and domain of the graph
+			.xAxis();
+			
+	timeChartCount.width(960)
+			.height(400)
+			.margins({top: 10, right: 10, bottom: 20, left: 40})
+			.dimension(xValue)
+			.group(yGroupCount)
+			.renderHorizontalGridLines(true)
+			.renderVerticalGridLines(true)	 
+			.mouseZoomable(true)
+			.transitionDuration(0)
+			//.rangeChart(barChartSum)
+			.renderDataPoints({radius: 5})
+			.brushOn(false)
+			.x(d3.scale.linear().domain([0, 100]))
+			.y(d3.scale.linear().domain([0, 10]))// scale and domain of the graph
+			.xAxis();
+			
+	 barChartSum.width(480)
+			.height(150)
+			.margins({top: 10, right: 10, bottom: 20, left: 40})
+			.dimension(xValue)								// the values across the x axis
+			.group(yGroupSum)							// the values on the y axis
+			.transitionDuration(0)
+			.centerBar(true)
+			.mouseZoomable(true)			
+			.gap(56)			// bar width Keep increasing to get right then back off.
+			.x(d3.scale.linear().domain([0, 100]))
+			.elasticY(true)
+			.xAxis().tickFormat(function(v) {return v;});	
+			
+	dc.renderAll();
 }
