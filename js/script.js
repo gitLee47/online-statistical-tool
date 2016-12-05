@@ -149,8 +149,19 @@ function createReport(headers) {
 		plotBtn.setAttribute("id", "plotBtn");
 		plotBtn.setAttribute("onclick", "plotGraph()");
 		plotBtn.innerHTML = "<p>Plot Graphs</p>";
-		plotBtn.setAttribute("class","btnUpload btnPrint textCenter");		
+		plotBtn.setAttribute("class","btnUpload btnPrint textCenter");	
 
+		
+	var isXTimeP = document.createElement("p");
+	isXTimeP.innerHTML = "Is X-Value a time value?";
+	var isXTime = document.createElement("select");
+		isXTime.setAttribute("id", "isXTime");
+		//xSelect.setAttribute("onchange", "Statistics(this.value)");
+		//Adding the headers to the dynamic drop down		
+		isXTime.innerHTML = '<option value="-1">--Select--</option>';
+		isXTime.innerHTML += '<option value="1">Yes</option>';
+		isXTime.innerHTML += '<option value="0">No</option>';
+	
 	
 	//Appending all the above items to the report in sequence
 	var reportDiv = document.getElementById("reportDiv");
@@ -166,8 +177,10 @@ function createReport(headers) {
 		reportDiv.appendChild(graphSelTitle);
 		reportDiv.appendChild(xSelect);
 		reportDiv.appendChild(ySelect);
-		reportDiv.appendChild(plotBtn);
 		
+		reportDiv.appendChild(isXTimeP);
+		reportDiv.appendChild(isXTime);
+		reportDiv.appendChild(plotBtn);
 		//Showing the report once it is ready
 		reportDiv.removeAttribute("class");
 		reportDiv.setAttribute("class", "show myDiv");
@@ -396,10 +409,14 @@ function createCharts() {
 function plotGraph(){
 	var x = document.getElementById("selectX");
 	var y = document.getElementById("selectY");
-	
+	var isXTime = document.getElementById("isXTime");
 	//console.log(x.value);
 	//console.log(y.value);
-	createDynamicCharts(x.value, y.value);
+	
+	if(isXTime.value == 0)
+		createDynamicCharts(x.value, y.value);
+	else if(isXTime.value == 1)
+		createDynamicChartsWithTime(x.value, y.value);
 }
 
 function createDynamicCharts(xCol,yCol) {
@@ -458,6 +475,7 @@ function createDynamicCharts(xCol,yCol) {
 			.renderHorizontalGridLines(true)
 			.renderVerticalGridLines(true)	 
 			.mouseZoomable(true)
+			.colors('red')
 			.transitionDuration(0)
 			.rangeChart(barChartSum)
 			.renderDataPoints({radius: 5})
@@ -472,6 +490,7 @@ function createDynamicCharts(xCol,yCol) {
 			.margins({top: 10, right: 10, bottom: 20, left: 40})
 			.dimension(xValue)
 			.group(yGroupCount)
+			.colors('blue')
 			.renderHorizontalGridLines(true)
 			.renderVerticalGridLines(true)	 
 			.mouseZoomable(true)
@@ -489,6 +508,7 @@ function createDynamicCharts(xCol,yCol) {
 			.dimension(xValue)								// the values across the x axis
 			.group(yGroupSum)							// the values on the y axis
 			.transitionDuration(0)
+			.colors('green')
 			.centerBar(true)
 			.mouseZoomable(true)			
 			.gap(56)			// bar width Keep increasing to get right then back off.
@@ -498,3 +518,112 @@ function createDynamicCharts(xCol,yCol) {
 			
 	dc.renderAll();
 }
+
+function createDynamicChartsWithTime(xCol,yCol) {
+
+	var rows = tableBody.rows,
+        rlen = rows.length,
+        x = [], y = [], data = [],
+        i;
+		
+    //Get statistics for the selected column if valid
+	cells = rows[0].cells;
+
+	if (!isNaN(parseInt(cells[xCol].innerHTML)) && !isNaN(parseInt(cells[yCol].innerHTML))) {
+	
+		for (i = 0; i < rlen; i++) {
+			data.push({x:rows[i].cells[xCol].innerHTML,
+					   y:parseInt(rows[i].cells[yCol].innerHTML)});
+		}
+	}
+	else {
+		alert("One of the column holds NaN values!! Please select another");
+		return;
+	}
+	
+	function print_filter(filter){
+				var f=eval(filter);
+				if (typeof(f.length) != "undefined") {}else{}
+				if (typeof(f.top) != "undefined") {f=f.top(Infinity);}else{}
+				if (typeof(f.dimension) != "undefined") {f=f.dimension(function(d) { return "";}).top(Infinity);}else{}
+				console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
+			};
+			
+	// format our data
+	var dtgFormat = d3.time.format("%Y-%m-%dT%H:%M:%S");
+	
+	var timeChartSum = dc.lineChart("#dc-time-chart-sum");
+	var timeChartCount = dc.lineChart("#dc-time-chart-count");
+	var barChartSum = dc.barChart("#dc-bar-chart-sum");
+	
+	data.forEach(function(d) { 
+		//console.log(d);
+		d.x = dtgFormat.parse(d.x.substr(0,19));
+	});
+
+	var facts = crossfilter(data);
+	//print_filter(facts);
+	
+	var xValue = facts.dimension(function (d) {
+		return d.x;
+	});
+	
+	var xValueByDay = facts.dimension(function(d) {
+		return d3.time.hour(d.x);
+	});
+	
+	var yGroupCount = xValue.group().reduceCount(function(d) { return d.y; });
+	var yGroupSum = xValue.group().reduceSum(function(d) { return d.y; });
+			
+	timeChartSum.width(960)
+			.height(400)
+			.margins({top: 10, right: 10, bottom: 20, left: 40})
+			.dimension(xValue)
+			.group(yGroupSum)
+			.colors('red')
+			.renderHorizontalGridLines(true)
+			.renderVerticalGridLines(true)	 
+			.mouseZoomable(true)
+			.transitionDuration(0)
+			//.rangeChart(barChartSum)
+			.renderDataPoints({radius: 5})
+			.elasticY(true)
+			.brushOn(false)
+			.x(d3.time.scale().domain([new Date(2013, 6, 18), new Date(2013, 6, 24)])) 
+			//.y(d3.scale.linear().domain([0, 50]))// scale and domain of the graph
+			.xAxis();
+			
+	timeChartCount.width(960)
+			.height(400)
+			.margins({top: 10, right: 10, bottom: 20, left: 40})
+			.dimension(xValueByDay)
+			.group(yGroupCount)
+			.colors('blue')
+			.renderHorizontalGridLines(true)
+			.renderVerticalGridLines(true)	 
+			.mouseZoomable(true)
+			.transitionDuration(0)
+			//.rangeChart(barChartSum)
+			.renderDataPoints({radius: 5})
+			.brushOn(false)
+			.x(d3.time.scale().domain([new Date(2013, 6, 18), new Date(2013, 6, 24)])) 
+			.y(d3.scale.linear().domain([0, 10]))// scale and domain of the graph
+			.xAxis();
+			
+	 barChartSum.width(480)
+			.height(150)
+			.margins({top: 10, right: 10, bottom: 20, left: 40})
+			.dimension(xValue)								// the values across the x axis
+			.group(yGroupSum)							// the values on the y axis
+			.transitionDuration(0)
+			.centerBar(true)
+			.mouseZoomable(true)			
+			.gap(56)			// bar width Keep increasing to get right then back off.
+			.x(d3.time.scale().domain([new Date(2013, 6, 18), new Date(2013, 6, 24)])) 
+			.elasticY(true)
+			.xAxis().tickFormat(function(v) {return v;});	
+			
+	dc.renderAll();
+}
+
+
