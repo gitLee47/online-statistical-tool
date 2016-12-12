@@ -18,7 +18,15 @@
 		<div id="reportDiv" class="hide">
 		</div>
 	</div>
-	
+	<div class="shareDiv">
+		<div class="oss-widget-interface"></div>
+	</div>
+	<div class="printDiv">
+		<div id="printDiv"></div>
+	</div>
+	</br>
+	</br>
+	</br>
 	<div class="panel with-nav-tabs panel-default" id="line-and-bubble">
 		<div class="panel-heading">
 			<ul id="bar-time-range" class="nav nav-tabs nav-justified">
@@ -34,25 +42,20 @@
 
 				<div class="tab-pane fade" id="tab2default">
 					<div class="reportDiv">
-						<div class="row">
-							<div span ="span12">
-									<h3>Plots:</h3>
-									<div span ="span12">
-										<div class='pie-graph span6' id='dc-bar-chart-sum'>
-											<h4>Bar plot of X vs Y</h4>
-										</div>
-										<div class='pie-graph span6' id='dc-depth-chart'>
-											<h4>Events by Depth (km)</h4>
-										</div>    
-									</div>
+						<h3 class="textCenter">Plots</h3>
+						<div class="row plotDiv bar1">				
+							<div id='dc-bar-chart-sum'>
+								<h4 class="textCenter">Bar plot of X vs Y</h4>
+							</div>			
+						</div>
+						<div class='row plotDiv line1'>
+							<div id='dc-time-chart-sum'>
+							  <h4 class="textCenter">Line Plot of X vs Y</h4>
 							</div>
 						</div>
-						<div class='row'>
-							<div class='span12' id='dc-time-chart-sum'>
-							  <h4>Line Plot of X vs Y</h4>
-							</div>
-							<div class='span12' id='dc-time-chart-count'>
-							  <h4>Line Plot of X vs Y based On Counts</h4>
+						<div class='row plotDiv line2'>
+							<div id='dc-time-chart-count'>
+							  <h4 class="textCenter">Line Plot of X vs Y based On Counts</h4>
 							</div>
 						</div>
 					</div>
@@ -60,19 +63,23 @@
 			</div>
 		</div>
 	</div>
-	
+	<a href="#" class="back-to-top">Back to Top</a>
+	<div class="center"><div class="footerBox">
+	<p class="footerLinks"> 
+	<a href="mailto:lrg37@pitt.edu">Contact |</a> <a href="http://localhost/online-statistical-tool/"> Home |</a> <a href="mailto:advertise@pitt.edu"> Advertise</a></p><p> This site is created and maintained by <a href="http://www.pitt.edu/~lrg37/" target="_blank">Liju Robin George</a> and <a href="http://www.pitt.edu/" target="_blank">Sanket Bagewadi.</a>. <br> This website is a non-profit and non-commercial venture.</p>
+	</div>
+	</div>
 
-	
-	
     <!-- Placed at the end of the document so the pages load faster -->
-	    <!-- d3.tip -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-	<script src="./js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="./js/d3tip.js"></script>
+    <script type="text/javascript" src="./js/jq.js"></script>
+	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/d3.js"></script>
+	<script type="text/javascript" src="./js/d3tip.js"></script>
 	<script type="text/javascript" src="./js/crossfilter.js"></script>
 	<script type="text/javascript" src="./js/dc3.js"></script>
 	<script type="text/javascript" src="./js/script.js"></script>
-	
+
+	<script type="text/javascript" src="//sharecdn.social9.com/v2/js/opensocialshare.js"></script><script type="text/javascript" src="//sharecdn.social9.com/v2/js/opensocialsharedefaulttheme.js"></script><link rel="stylesheet" type="text/css" href="//sharecdn.social9.com/v2/css/os-share-widget-style.css"/><script type="text/javascript">var shareWidget = new OpenSocialShare();shareWidget.init({isHorizontalLayout: 1,widgetIconSize: "32",widgetStyle: "square",theme: 'OpenSocialShareDefaultTheme',providers: { top: ["Facebook","GooglePlus","LinkedIn","Twitter"]}});shareWidget.injectInterface(".oss-widget-interface");shareWidget.setWidgetTheme(".oss-widget-interface");</script>
+
   </body>
 </html>

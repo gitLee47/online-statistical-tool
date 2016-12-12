@@ -52,19 +52,22 @@
 				//Start the creation of the Report
 				createReport(headers);
 				
-				var tableTitle = "<h3 class='textCenter'>Please click on any header to sort by that column (Print at bottom)</h3>"
+				var tableTitle = "<h3 class='textCenter'>Please click on any header to sort by that column</h3>"
 				
 				var printButton = document.createElement("button");
 				printButton.innerHTML = "<p>Print Report</p>"
 				printButton.setAttribute("onclick","printPage()");
 				printButton.setAttribute("class","btnUpload btnPrint textCenter");
-				//Settig the table to the view
+				//Setting the table to the view
 				var dvCSV = document.getElementById("dvCSV");
 				dvCSV.setAttribute("class", "reportDiv")
 				dvCSV.innerHTML = "";
 				dvCSV.innerHTML = tableTitle;
 				dvCSV.innerHTML += table;
-				dvCSV.appendChild(printButton);
+				
+				//Setting the printButton to the view
+				var printDiv = document.getElementById("printDiv");
+				printDiv.appendChild(printButton);
 				//Setting the global object for the table body
 				tableBody = document.getElementById("tableBody");
 				//removing the extra row
@@ -149,11 +152,10 @@ function createReport(headers) {
 		plotBtn.setAttribute("id", "plotBtn");
 		plotBtn.setAttribute("onclick", "plotGraph()");
 		plotBtn.innerHTML = "<p>Plot Graphs</p>";
-		plotBtn.setAttribute("class","btnUpload btnPrint textCenter");	
-
+		plotBtn.setAttribute("class","btnUpload btnPlot textCenter");	
 		
 	var isXTimeP = document.createElement("p");
-	isXTimeP.innerHTML = "Is X-Value a time value?";
+	isXTimeP.innerHTML = "<br/>Is X-Value a time value?";
 	var isXTime = document.createElement("select");
 		isXTime.setAttribute("id", "isXTime");
 		//xSelect.setAttribute("onchange", "Statistics(this.value)");
@@ -161,7 +163,6 @@ function createReport(headers) {
 		isXTime.innerHTML = '<option value="-1">--Select--</option>';
 		isXTime.innerHTML += '<option value="1">Yes</option>';
 		isXTime.innerHTML += '<option value="0">No</option>';
-	
 	
 	//Appending all the above items to the report in sequence
 	var reportDiv = document.getElementById("reportDiv");
@@ -239,7 +240,7 @@ function MaxMin(col) {
 	//Getting the max and min div created before and setting class to show
 	var maxDiv = document.getElementById("maxDiv");
 		maxDiv.removeAttribute("class");
-		maxDiv.setAttribute("class","show");
+		maxDiv.setAttribute("class","show dataDiv");
 		maxDiv.innerHTML = "";
     // sort the array by the specified column number (col) and order (asc) and find the min and max
 	if (!isNaN(parseInt(arr[0][col]))) {
@@ -249,7 +250,7 @@ function MaxMin(col) {
 		//Creating the max and min data section
 		var minRadius = (arr[0][col]/10000)+10;
 		var maxRadius = (arr[rlen-1][col]/10000) + 25;
-		maxDiv.innerHTML = "<p><b>Min</b>: "+arr[0][col]+" <b>Max</b>: "+arr[rlen-1][col]+"</p>";
+		maxDiv.innerHTML = "</br><p><b>Min</b>: "+arr[0][col]+" </br><b>Max</b>: "+arr[rlen-1][col]+"</p>";
 		maxDiv.innerHTML += "<p>Let us now have a perspective of the difference in the min and max values!</p>";
 		maxDiv.innerHTML += "<svg width='100' height='100'><circle cx='50' cy='50' r="+minRadius+" stroke='green' stroke-width='4' fill='yellow'/></svg>"
 		maxDiv.innerHTML += "<svg width='100' height='100'><circle cx='50' cy='50' r="+maxRadius+" stroke='yellow' stroke-width='4' fill='green'/></svg>"
@@ -258,7 +259,7 @@ function MaxMin(col) {
 		arr.sort(function (a, b) {
 			return (a[col] == b[col]) ? 0 : ((a[col] > b[col]) ? asc : -1 * asc);
 		});
-		maxDiv.innerHTML = "<p>This column is not a numerical type!! But here you go!</p><p><b>Min</b>: "+arr[0][col]+" <b>Max</b>: "+arr[rlen-1][col]+"</p>";
+		maxDiv.innerHTML = "</br><p>This column is not a numerical type!! But here you go!</p></br><p><b>Min</b>: "+arr[0][col]+"</br><b>Max</b>: "+arr[rlen-1][col]+"</p>";
 	}
 }
 //Function to find the statistics of a selected column 
@@ -273,7 +274,7 @@ function Statistics(col) {
 	//Getting the statistics div created before and setting class to show
 	var statDiv = document.getElementById("statDiv");
 		statDiv.removeAttribute("class");
-		statDiv.setAttribute("class","show");
+		statDiv.setAttribute("class","show dataDiv");
 		statDiv.innerHTML = "";
 		//Calculating all the sum, average, variance and standard deviation
 		for (i = 0; i < rlen; i++) {
@@ -288,7 +289,7 @@ function Statistics(col) {
 		variance = variance/rlen;
 		
 		std = Math.pow(variance, 0.5);
-		statDiv.innerHTML = "<p><b>Sum is</b>: "+sum+" <b>Average is</b>: "+avg+" <b>Variance is</b>: "+variance+" <b>Standard Dev is</b>: "+std+"</p>";
+		statDiv.innerHTML = "</br><p><b>Sum is</b>: "+sum+"</br> <b>Average is</b>: "+avg+" </br><b>Variance is</b>: "+variance+" </br><b>Standard Dev is</b>: "+std+"</p>";
 	}
 	else {
 		alert("This column holds NaN values!! Please select another");
@@ -626,4 +627,19 @@ function createDynamicChartsWithTime(xCol,yCol) {
 	dc.renderAll();
 }
 
+var amountScrolled = 300;
 
+$(window).scroll(function() {
+	if ( $(window).scrollTop() > amountScrolled ) {
+		$('a.back-to-top').fadeIn('slow');
+	} else {
+		$('a.back-to-top').fadeOut('slow');
+	}
+});
+
+$('a.back-to-top').click(function() {
+	$('html, body').animate({
+		scrollTop: 0
+	}, 700);
+	return false;
+});

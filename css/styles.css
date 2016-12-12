@@ -109,6 +109,44 @@ th:hover {
     margin-bottom: 50px;
 }
 
+.dataDiv {
+    font: 18px Arial, sans-serif;
+    padding-top: 8px;
+    clear: both;
+    line-height: 1.4em;
+    background-color: #fbfbcc;
+    border: #e1e8ed solid 1px;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 50px;
+	margin:0 auto;
+	width:50%;
+}
+
+.plotDiv {
+    font: 18px Arial, sans-serif;
+    padding-top: 8px;
+    clear: both;
+    line-height: 1.4em;
+    border: #e1e8ed solid 1px;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 50px;
+	margin:0 auto;
+}
+
+.bar1 {
+	background-color: #fbfbcc;
+}
+
+.line1 {
+	background-color: #fbfbee;
+}
+
+.line2 {
+	background-color: #fbfbaa;
+}
+
 .show{
    display: block;
 }
@@ -120,8 +158,46 @@ th:hover {
 .textCenter{
 	 text-align: center;
 }
-.btnPrint {
+.btnPlot {
   margin:auto;
   margin-top:10px;
   display:block;
+}
+
+.shareDiv {
+ float:left;
+}
+
+.printDiv {
+ float:right;
+}
+
+.btnPrint {
+  margin:auto;
+  display:block;
+  position:relative;
+  float:right;
+  background-color:#55acee;
+}
+
+a.back-to-top {
+	display: none;
+	width: 60px;
+	height: 60px;
+	text-indent: -9999px;
+	position: fixed;
+	z-index: 999;
+	right: 20px;
+	bottom: 20px;
+	background: #27AE61 url("../img/up.png") no-repeat center 43%;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+}
+
+.footerBox {
+    text-align: center;
+    margin: 40px 0 50px;
+    color: #4D6879;
+    font-size: 16px;
 }
